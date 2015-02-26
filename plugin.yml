@@ -1,0 +1,14 @@
+name: VillageMarker
+version: 0.40
+main: de.siemering.plugin.villagemarker.VillageMarker
+
+permissions:
+    villagemarker:
+        description: Send village information to the client with these permission.
+        default: true
+commands:
+    vm:
+        description: Command for VillageMarkerMod
+        usage: vm [on|off|t]
+        permission: villagemarker
+        permission-message: You don't have permission.
