@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 import java.util.*;
 
@@ -82,7 +82,8 @@ public class ClientUpdaterV2 extends Thread {
     }
 
 
-    private List<String> generateDataString(WorldServer world) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private List<String> generateDataString(WorldServer world) {
         int dim = worldServerTodim(world);
 
         //DataString erstellen
@@ -127,8 +128,8 @@ public class ClientUpdaterV2 extends Thread {
         if (p.hasPermission(VillageMarker.VILLAGEPERMISSION) && pconfig.getBoolean(p.getName(), true)) {
             for (String data : dataStringList) {
                 try {
-                	"KVM|Data", data.getBytes(Charsets.UTF_8)
-                    PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload();
+                    PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload("KVM|Data",
+                    		new PacketDataSerializer(Unpooled.copiedBuffer(data.getBytes(Charsets.UTF_8))));
                     ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
                 } catch (Exception e) {
                     Logger.logException(e);
@@ -137,7 +138,8 @@ public class ClientUpdaterV2 extends Thread {
         } else {
             String leerInfo = id + "<" + dim + ":" + "1:1>" + dim;
             try {
-                PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload("KVM|Data", leerInfo.getBytes(Charsets.UTF_8));
+                PacketPlayOutCustomPayload packet = new PacketPlayOutCustomPayload("KVM|Data", 
+                		new PacketDataSerializer(Unpooled.copiedBuffer(leerInfo.getBytes(Charsets.UTF_8))));
                 ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
             } catch (Exception e) {
                 Logger.logException(e);

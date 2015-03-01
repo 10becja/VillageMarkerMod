@@ -1,22 +1,15 @@
 package de.siemering.plugin.villagemarker.command;
 
-import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 public abstract class CommandHandler implements CommandExecutor {
 
-	private String permission;
 	private boolean allowConsol;
 	
 	public CommandHandler(String permission, boolean allowConsol){
-		this.permission = permission;
 		this.allowConsol = allowConsol;
 	}
 	
